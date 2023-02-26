@@ -19,7 +19,9 @@ public class Player : MonoBehaviour
     public GameObject bullet;
     Vector2 blasterPositionDefault;
     Quaternion blasterRotationDefault;
-    public float speed;
+    public float walkSpeed;
+    public float jumpSpeed;
+    bool grounded;
     Direction lastDirection = Direction.right;
     Direction generalDirection = Direction.right;
 
@@ -84,7 +86,12 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
+        {
+            rigidbody.AddForce(transform.up * jumpSpeed, ForceMode2D.Impulse);
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
         {
             GameObject newBullet = Instantiate(bullet, bulletSpawnPoint.transform.position, new Quaternion(0, 0, 0, 0));
             newBullet.transform.localScale = new Vector3(newBullet.transform.localScale.x * blaster.transform.localScale.x,
@@ -95,18 +102,22 @@ public class Player : MonoBehaviour
             switch (generalDirection)
             {
                 case Direction.up:
+                    newBullet.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX;
                     tempBullet.bulletDirection = transform.up;
                     break;
 
                 case Direction.down:
+                    newBullet.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX;
                     tempBullet.bulletDirection = -transform.up;
                     break;
 
                 case Direction.right:
+                    newBullet.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionY;
                     tempBullet.bulletDirection = transform.right;
                     break;
 
                 case Direction.left:
+                    newBullet.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionY;
                     tempBullet.bulletDirection = -transform.right;
                     break;
             }
@@ -115,6 +126,16 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigidbody.AddForce(new Vector2(Input.GetAxis("Horizontal") * speed, 0), ForceMode2D.Force);
+        rigidbody.AddForce(new Vector2(Input.GetAxis("Horizontal") * walkSpeed, 0), ForceMode2D.Force);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        grounded = true;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        grounded = false;
     }
 }

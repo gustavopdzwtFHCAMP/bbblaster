@@ -325,8 +325,8 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 20
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_AngularDrag: 0
+  m_GravityScale: 30
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -373,7 +373,8 @@ MonoBehaviour:
   blaster: {fileID: 427252152}
   bulletSpawnPoint: {fileID: 876635739}
   bullet: {fileID: 1545992423744112668, guid: 2ed04e59a2a08d34ea9f5effb58253b1, type: 3}
-  speed: 150
+  walkSpeed: 400
+  jumpSpeed: 125
 --- !u!4 &601134456
 Transform:
   m_ObjectHideFlags: 0
