@@ -14,6 +14,7 @@ public enum Direction
 public class Player : MonoBehaviour
 {
     Rigidbody2D rigidbody;
+    public GameObject body;
     public GameObject blaster;
     public GameObject bulletSpawnPoint;
     public GameObject bullet;
@@ -21,6 +22,8 @@ public class Player : MonoBehaviour
     Quaternion blasterRotationDefault;
     public float walkSpeed;
     public float jumpSpeed;
+    public float walkSpeedMinimizer;
+    float walkSpeedMinimizerTemp;
     bool grounded;
     Direction lastDirection = Direction.right;
     Direction generalDirection = Direction.right;
@@ -31,6 +34,7 @@ public class Player : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         blasterPositionDefault = blaster.transform.localPosition;
         blasterRotationDefault = blaster.transform.rotation;
+        walkSpeedMinimizerTemp = walkSpeedMinimizer;
     }
 
     // Update is called once per frame
@@ -75,11 +79,13 @@ public class Player : MonoBehaviour
             switch (lastDirection)
             {
                 case Direction.right:
+                    body.transform.localScale = new Vector3(-1, 1, 1);
                     blaster.transform.localPosition = new Vector2(blasterPositionDefault.x * 1, blasterPositionDefault.y);
                     blaster.transform.localScale = new Vector3(1, 1, 1);
                     break;
 
                 case Direction.left:
+                    body.transform.localScale = new Vector3(1, 1, 1);
                     blaster.transform.localPosition = new Vector2(blasterPositionDefault.x * -1, blasterPositionDefault.y);
                     blaster.transform.localScale = new Vector3(-1, -1, 1);
                     break;
@@ -126,16 +132,18 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rigidbody.AddForce(new Vector2(Input.GetAxis("Horizontal") * walkSpeed, 0), ForceMode2D.Force);
+        rigidbody.AddForce(new Vector2(Input.GetAxis("Horizontal") * walkSpeed * walkSpeedMinimizerTemp, 0), ForceMode2D.Force);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         grounded = true;
+        walkSpeedMinimizerTemp = 1;
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         grounded = false;
+        walkSpeedMinimizerTemp = walkSpeedMinimizer;
     }
 }
