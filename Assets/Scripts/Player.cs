@@ -79,13 +79,13 @@ public class Player : MonoBehaviour
             switch (lastDirection)
             {
                 case Direction.right:
-                    body.transform.localScale = new Vector3(-1, 1, 1);
+                    body.transform.localScale = new Vector3(1, 1, 1);
                     blaster.transform.localPosition = new Vector2(blasterPositionDefault.x * 1, blasterPositionDefault.y);
                     blaster.transform.localScale = new Vector3(1, 1, 1);
                     break;
 
                 case Direction.left:
-                    body.transform.localScale = new Vector3(1, 1, 1);
+                    body.transform.localScale = new Vector3(-1, 1, 1);
                     blaster.transform.localPosition = new Vector2(blasterPositionDefault.x * -1, blasterPositionDefault.y);
                     blaster.transform.localScale = new Vector3(-1, -1, 1);
                     break;
